@@ -75,10 +75,10 @@
 		CA3C5EB12CC7529E001600D8 = {
 			isa = PBXGroup;
 			children = (
+				CA3C5EBB2CC7529E001600D8 /* Products */,
 				CA3C5EBC2CC7529E001600D8 /* Task Ninja */,
 				CA3C5ECD2CC7529F001600D8 /* Task NinjaTests */,
 				CA3C5ED72CC7529F001600D8 /* Task NinjaUITests */,
-				CA3C5EBB2CC7529E001600D8 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
