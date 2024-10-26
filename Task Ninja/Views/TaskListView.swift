@@ -22,18 +22,25 @@ struct TaskListView: View {
   
   
     var body: some View {
-       
-      
       List {
         Section("Pending") {
-          ForEach(pendingTaskItems) { taskItem in
-            TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
-            
+          if pendingTaskItems.isEmpty {
+            ContentUnavailableView("No items found.", systemImage: "doc")
+          } else {
+            ForEach(pendingTaskItems) { taskItem in
+              TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
+              
+            }
           }
         }
+        
         Section("Completed") {
-          ForEach(completedTaskItems) { taskItem in
-            TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
+          if completedTaskItems.isEmpty {
+            ContentUnavailableView("No items found.", systemImage: "doc")
+          } else {
+            ForEach(completedTaskItems) { taskItem in
+              TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
+            }
           }
         }
         
