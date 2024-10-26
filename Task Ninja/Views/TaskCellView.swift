@@ -15,7 +15,11 @@ struct TaskCellView: View {
   
     var body: some View {
       HStack {
-        Image(systemName: taskItem.isCompleted ? "checkmark.circle.fill" : "square")
+        Image(systemName: taskItem.isCompleted ? "checkmark.square" : "square")
+          .onTapGesture {
+            taskItem.isCompleted.toggle()
+            onChanged(taskItem)
+          }
         Text(taskItem.title ?? "")
         
       }

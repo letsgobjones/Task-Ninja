@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-  @Environment(\.managedObjectContext) private var context
+//  @Environment(\.managedObjectContext) private var context
+  
+  @EnvironmentObject var taskStore: TaskStore
   @State private var title: String = ""
 
   private var isFormValid: Bool {
@@ -21,7 +23,8 @@ struct ContentView: View {
             .textFieldStyle(.roundedBorder)
             .onSubmit {
               if isFormValid {
-                saveTaskItem()
+                taskStore.saveTaskItem(title: title)
+                title = ""
               }
             }
           
@@ -38,21 +41,22 @@ struct ContentView: View {
   NavigationStack {
     ContentView()
       .environment(\.managedObjectContext, CoreDataProvider.preview.viewContext)
+      .environmentObject(TaskStore(context: CoreDataProvider.preview.viewContext))
   }
 }
 
 
-extension ContentView {
-  private func saveTaskItem() {
-    let taskItem = TaskItem(context: context)
-    taskItem.title = title
-    do {
-      try context.save()
-    } catch {
-      print(error)
-    }
-    title = ""
-
-  }
-}
+//extension ContentView {
+//  private func saveTaskItem() {
+//    let taskItem = TaskItem(context: context)
+//    taskItem.title = title
+//    do {
+//      try context.save()
+//    } catch {
+//      print(error)
+//    }
+//    title = ""
+//
+//  }
+//}
 

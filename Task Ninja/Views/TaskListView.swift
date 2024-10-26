@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TaskListView: View {
   @FetchRequest(sortDescriptors: []) private var taskItems: FetchedResults<TaskItem>
+  @EnvironmentObject var taskStore: TaskStore
 
   
   private var pendingTaskItems: [TaskItem] {
@@ -26,13 +27,13 @@ struct TaskListView: View {
       List {
         Section("Pending") {
           ForEach(pendingTaskItems) { taskItem in
-            TaskCellView(taskItem: taskItem) {_ in }
+            TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
             
           }
         }
         Section("Completed") {
           ForEach(completedTaskItems) { taskItem in
-            TaskCellView(taskItem: taskItem) {_ in }
+            TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
           }
         }
         
@@ -46,6 +47,8 @@ struct TaskListView: View {
   NavigationStack {
     TaskListView()
       .environment(\.managedObjectContext, CoreDataProvider.preview.viewContext)
+      .environmentObject(TaskStore(context: CoreDataProvider.preview.viewContext))
+
 
     
     

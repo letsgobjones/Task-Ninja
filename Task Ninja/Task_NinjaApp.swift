@@ -16,6 +16,7 @@ struct Task_NinjaApp: App {
       NavigationStack {
         ContentView()
           .environment(\.managedObjectContext, provider.viewContext)
+          .environmentObject(TaskStore(context: provider.viewContext))
       }
     }
   }
