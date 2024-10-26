@@ -37,5 +37,14 @@ class TaskStore: ObservableObject {
     
   }
   
+  func deleteTaskItem(_ taskItem: TaskItem) {
+    viewContext.delete(taskItem)
+    do {
+      try viewContext.save()
+    }
+    catch {
+      print(error)
+    }
+  }
   
 }

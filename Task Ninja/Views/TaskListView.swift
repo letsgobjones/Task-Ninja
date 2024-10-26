@@ -10,7 +10,7 @@ import SwiftUI
 struct TaskListView: View {
   @FetchRequest(sortDescriptors: []) private var taskItems: FetchedResults<TaskItem>
   @EnvironmentObject var taskStore: TaskStore
-
+  
   
   private var pendingTaskItems: [TaskItem] {
     taskItems.filter { !$0.isCompleted }
@@ -21,33 +21,41 @@ struct TaskListView: View {
   }
   
   
-    var body: some View {
-      List {
-        Section("Pending") {
-          if pendingTaskItems.isEmpty {
-            ContentUnavailableView("No items found.", systemImage: "doc")
-          } else {
-            ForEach(pendingTaskItems) { taskItem in
-              TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
-              
+  var body: some View {
+    List {
+      Section("Pending") {
+        if pendingTaskItems.isEmpty {
+          ContentUnavailableView("No items found.", systemImage: "doc")
+        } else {
+          ForEach(pendingTaskItems) { taskItem in
+            TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
+          }.onDelete { indexSet in
+            indexSet.forEach { index in
+              let taskItem = pendingTaskItems[index]
+              taskStore.deleteTaskItem(taskItem)
+            }
+          }
+        }
+      }
+      
+      Section("Completed") {
+        if completedTaskItems.isEmpty {
+          ContentUnavailableView("No items found.", systemImage: "doc")
+        } else {
+          ForEach(completedTaskItems) { taskItem in
+            TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
+          }.onDelete { indexSet in
+            indexSet.forEach { index in
+              let taskItem = completedTaskItems[index]
+              taskStore.deleteTaskItem(taskItem)
+
             }
           }
         }
         
-        Section("Completed") {
-          if completedTaskItems.isEmpty {
-            ContentUnavailableView("No items found.", systemImage: "doc")
-          } else {
-            ForEach(completedTaskItems) { taskItem in
-              TaskCellView(taskItem: taskItem, onChanged: taskStore.updateTaskItem)
-            }
-          }
-        }
-        
-      }.listStyle(.plain)
-      
-      
-    }
+      }
+    }.listStyle(.plain)
+  }
 }
 
 #Preview {
@@ -55,10 +63,5 @@ struct TaskListView: View {
     TaskListView()
       .environment(\.managedObjectContext, CoreDataProvider.preview.viewContext)
       .environmentObject(TaskStore(context: CoreDataProvider.preview.viewContext))
-
-
-    
-    
-    
   }
 }
