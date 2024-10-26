@@ -8,26 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-  
   @Environment(\.managedObjectContext) private var context
-  @FetchRequest(sortDescriptors: []) private var taskItems: FetchedResults<TaskItem>
-  
   @State private var title: String = ""
 
   private var isFormValid: Bool {
     !title.isEmptyOrWhitespace
   }
-  
-  private var pendingTaskItems: [TaskItem] {
-    taskItems.filter { !$0.isCompleted }
-  }
-  
-  private var completedTaskItems: [TaskItem] {
-    taskItems.filter { $0.isCompleted }
-  }
-  
-  
-  
   
     var body: some View {
         VStack {
@@ -39,20 +25,8 @@ struct ContentView: View {
               }
             }
           
-          List {
-            Section("Pending") {
-              ForEach(pendingTaskItems) { taskItem in
-                Text(taskItem.title ?? "")
-                
-              }
-            }
-            Section("Completed") {
-              ForEach(completedTaskItems) { taskItem in
-                Text(taskItem.title ?? "")
-              }
-            }
-            
-          }.listStyle(.plain)
+          TaskListView()
+          
           Spacer()
         }
         .padding()
