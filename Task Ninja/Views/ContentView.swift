@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
-//  @Environment(\.managedObjectContext) private var context
-  
+struct ContentView: View {  
   @EnvironmentObject var taskStore: TaskStore
   @State private var title: String = ""
 
@@ -29,7 +27,6 @@ struct ContentView: View {
             }
           
           TaskListView()
-          
           Spacer()
         }
         .padding()
@@ -44,19 +41,4 @@ struct ContentView: View {
       .environmentObject(TaskStore(context: CoreDataProvider.preview.viewContext))
   }
 }
-
-
-//extension ContentView {
-//  private func saveTaskItem() {
-//    let taskItem = TaskItem(context: context)
-//    taskItem.title = title
-//    do {
-//      try context.save()
-//    } catch {
-//      print(error)
-//    }
-//    title = ""
-//
-//  }
-//}
 

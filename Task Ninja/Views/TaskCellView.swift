@@ -20,7 +20,17 @@ struct TaskCellView: View {
             taskItem.isCompleted.toggle()
             onChanged(taskItem)
           }
-        Text(taskItem.title ?? "")
+        if taskItem.isCompleted {
+          Text(taskItem.title ?? "")
+        } else {
+          TextField("", text: Binding(get: {
+            taskItem.title ?? ""
+          }, set: { newValue in
+            taskItem.title = newValue
+          })).onSubmit {
+            onChanged(taskItem)
+          }
+        }
         
       }
     }
@@ -31,7 +41,6 @@ struct TaskCellView: View {
   taskItem.title = "Test Task"
   taskItem.isCompleted = false
   
-  return TaskCellView( taskItem: taskItem, onChanged: { _ in }
+  return TaskCellView( taskItem: taskItem, onChanged: { _ in }).padding()
   
-    )
 }
