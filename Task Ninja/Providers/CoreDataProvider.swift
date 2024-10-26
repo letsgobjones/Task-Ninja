@@ -22,6 +22,7 @@ class CoreDataProvider {
     for index in 1..<10 {
       let taskItem = TaskItem(context: viewContext)
       taskItem.title = "Task Item \(index)"
+      taskItem.isCompleted = index % 2 == 0 ? true : false
     }
     do {
      try viewContext.save()

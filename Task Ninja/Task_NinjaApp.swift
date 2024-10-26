@@ -11,12 +11,12 @@ import SwiftUI
 struct Task_NinjaApp: App {
   
   let provider = CoreDataProvider()
-    var body: some Scene {
-        WindowGroup {
-          NavigationStack {
-            ContentView()
-              .environment(\.managedObjectContext, provider.viewContext)
-          }
-        }
+  var body: some Scene {
+    WindowGroup {
+      NavigationStack {
+        ContentView()
+          .environment(\.managedObjectContext, provider.viewContext)
+      }
     }
+  }
 }

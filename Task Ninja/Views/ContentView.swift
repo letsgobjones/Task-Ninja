@@ -10,11 +10,24 @@ import SwiftUI
 struct ContentView: View {
   
   @Environment(\.managedObjectContext) private var context
-  @State private var title: String = ""
+  @FetchRequest(sortDescriptors: []) private var taskItems: FetchedResults<TaskItem>
   
+  @State private var title: String = ""
+
   private var isFormValid: Bool {
     !title.isEmptyOrWhitespace
   }
+  
+  private var pendingTaskItems: [TaskItem] {
+    taskItems.filter { !$0.isCompleted }
+  }
+  
+  private var completedTaskItems: [TaskItem] {
+    taskItems.filter { $0.isCompleted }
+  }
+  
+  
+  
   
     var body: some View {
         VStack {
@@ -25,20 +38,47 @@ struct ContentView: View {
                 saveTaskItem()
               }
             }
+          
+          List {
+            Section("Pending") {
+              ForEach(pendingTaskItems) { taskItem in
+                Text(taskItem.title ?? "")
+                
+              }
+            }
+            Section("Completed") {
+              ForEach(completedTaskItems) { taskItem in
+                Text(taskItem.title ?? "")
+              }
+            }
+            
+          }.listStyle(.plain)
+          Spacer()
         }
         .padding()
+        .navigationTitle("Task Ninja")
     }
 }
 
 #Preview {
+  NavigationStack {
     ContentView()
-    .environment(\.managedObjectContext, CoreDataProvider.preview.viewContext)
+      .environment(\.managedObjectContext, CoreDataProvider.preview.viewContext)
+  }
 }
 
 
 extension ContentView {
   private func saveTaskItem() {
-    
-    
+    let taskItem = TaskItem(context: context)
+    taskItem.title = title
+    do {
+      try context.save()
+    } catch {
+      print(error)
+    }
+    title = ""
+
   }
 }
+
